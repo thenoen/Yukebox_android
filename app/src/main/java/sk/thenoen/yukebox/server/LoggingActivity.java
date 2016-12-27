@@ -9,8 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 
+import java.io.File;
 import java.io.IOException;
 
+import fi.iki.elonen.SimpleWebServer;
 import fi.iki.elonen.util.ServerRunner;
 import sk.thenoen.yukebox.R;
 
@@ -31,10 +33,11 @@ public class LoggingActivity extends AppCompatActivity {
 		EditText editText = (EditText) findViewById(R.id.logging_text);
 		editText.setText("Please access! http://" + formatedIpAddress + ":" + port);
 
+		File wwwDirectory = new File(getFilesDir(), getResources().getString(R.string.www_dir_name));
+		SimpleWebServer simpleWebServer = new SimpleWebServer(null, 8080, wwwDirectory, false);
 
-		WebServer webServer = new WebServer(port);
 		try {
-			webServer.start();
+			simpleWebServer.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
