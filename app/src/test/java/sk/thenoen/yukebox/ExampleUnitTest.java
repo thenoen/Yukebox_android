@@ -14,4 +14,10 @@ public class ExampleUnitTest {
 	public void addition_isCorrect() throws Exception {
 		assertEquals(4, 2 + 2);
 	}
+
+	@Test
+	public void verifyYoutubeService() throws Exception {
+		YoutubeService youtubeService = new YoutubeService();
+		youtubeService.search("song of silence");
+	}
 }
