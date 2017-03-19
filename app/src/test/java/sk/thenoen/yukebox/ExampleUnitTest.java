@@ -1,5 +1,6 @@
 package sk.thenoen.yukebox;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -15,6 +16,7 @@ public class ExampleUnitTest {
 		assertEquals(4, 2 + 2);
 	}
 
+	@Ignore("it is using real youtube api")
 	@Test
 	public void verifyYoutubeService() throws Exception {
 		YoutubeService youtubeService = new YoutubeService();

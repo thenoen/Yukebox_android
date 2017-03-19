@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import fi.iki.elonen.SimpleWebServer;
 import fi.iki.elonen.util.ServerRunner;
@@ -25,10 +26,11 @@ public class LoggingActivity extends AppCompatActivity {
 
 		int port = 8080;
 
-		WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+		WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 		int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
-		final String formatedIpAddress = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff),
-				(ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
+		final String formatedIpAddress = String.format(Locale.getDefault(),
+				"%d.%d.%d.%d",
+				(ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
 
 		EditText editText = (EditText) findViewById(R.id.logging_text);
 		editText.setText("Please access! http://" + formatedIpAddress + ":" + port);
