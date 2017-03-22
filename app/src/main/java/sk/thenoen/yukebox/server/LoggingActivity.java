@@ -13,11 +13,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.SimpleWebServer;
 import fi.iki.elonen.util.ServerRunner;
 import sk.thenoen.yukebox.R;
+import sk.thenoen.yukebox.apiserver.ApiServer;
 
 public class LoggingActivity extends AppCompatActivity {
+
+	private SimpleWebServer simpleWebServer;
+	private ApiServer apiServer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,7 @@ public class LoggingActivity extends AppCompatActivity {
 		editText.setText("Please access! http://" + formatedIpAddress + ":" + port);
 
 		File wwwDirectory = new File(getFilesDir(), getResources().getString(R.string.www_dir_name));
-		SimpleWebServer simpleWebServer = new SimpleWebServer(null, 8080, wwwDirectory, false);
+		simpleWebServer = new SimpleWebServer(null, 8080, wwwDirectory, false);
 
 		try {
 			simpleWebServer.start();
@@ -44,6 +49,22 @@ public class LoggingActivity extends AppCompatActivity {
 			e.printStackTrace();
 		}
 
+		apiServer = new ApiServer(9090);
+		try {
+			apiServer.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
+	@Override
+	protected void onDestroy() {
+		if (simpleWebServer != null) {
+			simpleWebServer.stop();
+		}
+		if (apiServer != null) {
+			apiServer.stop();
+		}
+		super.onDestroy();
+	}
 }

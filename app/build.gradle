@@ -31,8 +31,11 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 	compile 'com.google.code.findbugs:jsr305:2.0.1'
 
-//	compile group: 'org.nanohttpd', name: 'nanohttpd', version: '2.3.1'
+	compile group: 'org.nanohttpd', name: 'nanohttpd', version: '2.3.1'
 	compile group: 'org.nanohttpd', name: 'nanohttpd-webserver', version: '2.3.1'
+	compile group: 'org.nanohttpd', name: 'nanohttpd-nanolets', version: '2.3.1'
+
+
 	compile group: 'commons-io', name: 'commons-io', version: '2.4'
 
 
