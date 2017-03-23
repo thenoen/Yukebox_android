@@ -36,7 +36,8 @@ public class ApiController extends RouterNanoHTTPD.GeneralHandler {
 		} else {
 			text.append("<p>no params in url</p><br>");
 		}
-		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), text.toString());
+//		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), text.toString());
+		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), "{}");
 	}
 
 }
