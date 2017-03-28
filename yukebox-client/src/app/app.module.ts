@@ -6,10 +6,12 @@ import { ApiService } from './services/api.service';
 
 
 import { AppComponent } from './app.component';
+import { SearchFormComponent } from './search-form/search-form.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SearchFormComponent
   ],
   imports: [
     BrowserModule,
