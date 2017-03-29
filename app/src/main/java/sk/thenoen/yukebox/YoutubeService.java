@@ -21,12 +21,21 @@ public class YoutubeService {
 	// https://developers.google.com/youtube/v3/docs/search/list#type
 	private static final String SEARCH_TYPE = "video";
 
+	private static YoutubeService instance;
+
 	private YouTube youtube;
 
-	public YoutubeService() {
+	private YoutubeService() {
 	}
 
-	public void search(String queryTerm) {
+	public static synchronized YoutubeService getInstance() {
+		if(instance == null) {
+			instance = new YoutubeService();
+		}
+		return instance;
+	}
+
+	public List<SearchResult> search(String queryTerm) {
 
 		Properties properties = new Properties();
 		try {
@@ -74,5 +83,6 @@ public class YoutubeService {
 			System.out.println(searchResultList);
 		}
 
+		return searchResultList;
 	}
 }

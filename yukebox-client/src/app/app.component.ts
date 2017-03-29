@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     console.log("going to make request");
-    this.apiService.getStringResponse().subscribe();
+    // this.apiService.getStringResponse().subscribe();
     console.log("making request finished");
   }
 

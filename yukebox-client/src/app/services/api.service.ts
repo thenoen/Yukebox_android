@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions, URLSearchParams} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { SearchResult } from './search-result'
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -8,6 +9,7 @@ import 'rxjs/add/operator/map';
 export class ApiService {
 
     private apiUrl = 'api/this-part-does-not-matter';
+    private searchUrl = 'api/search';
 
     constructor(private http: Http) { }
 
@@ -16,6 +18,25 @@ export class ApiService {
         return this.http.get(this.apiUrl)
             .map(this.extractData)
             .catch(this.handleError);
+    }
+
+    searchVideos(query: string): Observable<SearchResult> {
+
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('query', query);
+
+        let opts: RequestOptions = new RequestOptions();
+        opts.search = params;
+
+        return this.http.get(this.searchUrl, opts)
+            .map(this.extractSearchResults)
+            .catch(this.handleError);
+    }
+
+    private extractSearchResults(res: Response) {
+        let responseBody = res.json();
+        console.log(responseBody);
+        return responseBody;
     }
 
     private extractData(res: Response) {

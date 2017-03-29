@@ -1,9 +1,13 @@
 package sk.thenoen.yukebox.apiserver;
 
+import com.google.api.services.youtube.model.SearchResult;
+
+import java.util.List;
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
+import sk.thenoen.yukebox.YoutubeService;
 
 public class ApiController extends RouterNanoHTTPD.GeneralHandler {
 
@@ -37,7 +41,11 @@ public class ApiController extends RouterNanoHTTPD.GeneralHandler {
 			text.append("<p>no params in url</p><br>");
 		}
 //		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), text.toString());
-		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), "{}");
+//		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), "{some: value}");
+
+		YoutubeService youtubeService = YoutubeService.getInstance();
+		List<SearchResult> searchResults = youtubeService.search(session.getParameters().get("query").get(0));
+		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), "{\"results\":\"" + searchResults.get(0).getSnippet().getTitle() + "\"}");
 	}
 
 }
