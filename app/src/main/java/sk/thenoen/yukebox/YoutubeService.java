@@ -13,9 +13,10 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
+import sk.thenoen.yukebox.server.YoutubeUtils;
+
 public class YoutubeService {
 
-	private static final String PROPERTIES_CLASSPATH = "/youtube.properties";
 	private static final long NUMBER_OF_VIDEOS_RETURNED = 10;
 
 	// https://developers.google.com/youtube/v3/docs/search/list#type
@@ -37,16 +38,7 @@ public class YoutubeService {
 
 	public List<SearchResult> search(String queryTerm) {
 
-		Properties properties = new Properties();
-		try {
-			InputStream in = YoutubeService.class.getResourceAsStream(PROPERTIES_CLASSPATH);
-			properties.load(in);
 
-		} catch (IOException e) {
-			System.err.println("There was an error reading " + PROPERTIES_CLASSPATH + ": " + e.getCause()
-					+ " : " + e.getMessage());
-			System.exit(1);
-		}
 
 		youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
 			public void initialize(HttpRequest request) throws IOException {
@@ -61,7 +53,7 @@ public class YoutubeService {
 			e.printStackTrace();
 		}
 
-		String apiKey = properties.getProperty("youtube.apikey");
+		String apiKey = YoutubeUtils.getYoutubeApiKey();
 		search.setKey(apiKey);
 		search.setQ(queryTerm);
 		search.setType(SEARCH_TYPE);

@@ -19,7 +19,7 @@ public class ExampleUnitTest {
 	@Ignore("it is using real youtube api")
 	@Test
 	public void verifyYoutubeService() throws Exception {
-		YoutubeService youtubeService = new YoutubeService();
+		YoutubeService youtubeService = YoutubeService.getInstance();
 		youtubeService.search("song of silence");
 	}
 }
