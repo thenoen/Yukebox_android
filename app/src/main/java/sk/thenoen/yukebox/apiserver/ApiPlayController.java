@@ -1,7 +1,6 @@
 package sk.thenoen.yukebox.apiserver;
 
 import com.google.api.services.youtube.model.SearchResult;
-import com.google.api.services.youtube.model.SearchResultSnippet;
 
 import java.util.List;
 import java.util.Map;
@@ -9,8 +8,9 @@ import java.util.Map;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 import sk.thenoen.yukebox.YoutubeService;
+import sk.thenoen.yukebox.server.MediaPlayer;
 
-public class ApiController extends RouterNanoHTTPD.GeneralHandler {
+public class ApiPlayController extends RouterNanoHTTPD.GeneralHandler {
 
 	@Override
 	public String getMimeType() {
@@ -44,12 +44,10 @@ public class ApiController extends RouterNanoHTTPD.GeneralHandler {
 //		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), text.toString());
 //		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), "{some: value}");
 
-		YoutubeService youtubeService = YoutubeService.getInstance();
-		List<SearchResult> searchResults = youtubeService.search(session.getParameters().get("query").get(0));
-		SearchResultSnippet snippet = searchResults.get(0).getSnippet();
-		String videoId = searchResults.get(0).getId().getVideoId();
-		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(),
-				"{\"results\":\"" + snippet.getTitle() + "\", \"videoId\":\"" + videoId + "\"}");
+		MediaPlayer mediaPlayer = uriResource.initParameter(0, MediaPlayer.class);
+		String videoId = session.getParameters().get("videoId").get(0);
+		mediaPlayer.playVideo(videoId);
+		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), "{\"result\":\"plaing video" + videoId + "\"}");
 	}
 
 }

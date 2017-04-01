@@ -1,5 +1,5 @@
 <form>
-  <input type="text" #searchInput />
-  <button (click)="sendSearchRequest(searchInput)">suche! suche!</button>
+    <input type="text" #searchInput />
+    <button (click)="sendSearchRequest(searchInput)">suche! suche!</button>
 </form>
-<span>{{serverResponse}}</span>
+<span (click)="startPlayback()">{{serverResponse}}</span>

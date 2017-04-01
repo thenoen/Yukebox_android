@@ -26,16 +26,18 @@ import fi.iki.elonen.SimpleWebServer;
 import fi.iki.elonen.util.ServerRunner;
 import sk.thenoen.yukebox.R;
 import sk.thenoen.yukebox.YoutubeService;
+import sk.thenoen.yukebox.apiserver.ApiPlayController;
 import sk.thenoen.yukebox.apiserver.ApiServer;
 
 public class LoggingActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
-	public static final int SERVER_PORT = 8080;
-	private SimpleWebServer simpleWebServer;
+	public static final int SERVER_PORT = 9090;
 	private ApiServer apiServer;
 
 
 	private YouTubePlayerView youTubeView;
+	private YouTubePlayer youTubePlayer;
+	private MediaPlayer mediaPlayer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +54,8 @@ public class LoggingActivity extends YouTubeBaseActivity implements YouTubePlaye
 		editText.setText("Please access! http://" + formatedIpAddress + ":" + SERVER_PORT);
 
 		File wwwDirectory = new File(getFilesDir(), getResources().getString(R.string.www_dir_name));
-		simpleWebServer = new SimpleWebServer(null, 8080, wwwDirectory, false);
 
-		try {
-			simpleWebServer.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		apiServer = new ApiServer(9090);
+		apiServer = new ApiServer(SERVER_PORT, wwwDirectory);
 		try {
 			apiServer.start();
 		} catch (IOException e) {
@@ -72,9 +67,6 @@ public class LoggingActivity extends YouTubeBaseActivity implements YouTubePlaye
 
 	@Override
 	protected void onDestroy() {
-		if (simpleWebServer != null) {
-			simpleWebServer.stop();
-		}
 		if (apiServer != null) {
 			apiServer.stop();
 		}
@@ -88,38 +80,9 @@ public class LoggingActivity extends YouTubeBaseActivity implements YouTubePlaye
 
 	@Override
 	public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean b) {
-		youTubePlayer.cueVideo("1JZnj4eNHXE");
-		youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
-			@Override
-			public void onLoading() {
-
-			}
-
-			@Override
-			public void onLoaded(String s) {
-				youTubePlayer.play();
-			}
-
-			@Override
-			public void onAdStarted() {
-
-			}
-
-			@Override
-			public void onVideoStarted() {
-
-			}
-
-			@Override
-			public void onVideoEnded() {
-
-			}
-
-			@Override
-			public void onError(YouTubePlayer.ErrorReason errorReason) {
-
-			}
-		});
+		this.youTubePlayer = youTubePlayer;
+		this.mediaPlayer = new MediaPlayer(youTubePlayer);
+		apiServer.addMapping("/api/play", ApiPlayController.class, mediaPlayer);
 	}
 
 	@Override

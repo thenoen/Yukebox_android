@@ -9,7 +9,8 @@ import { SearchResult } from '../services/search-result';
 })
 export class SearchFormComponent implements OnInit {
 
-  serverResponse: string;
+  serverResponse: string
+  videoId: string;
 
   constructor(private apiService: ApiService) { }
 
@@ -26,9 +27,19 @@ export class SearchFormComponent implements OnInit {
     return false;
   }
 
+  startPlayback() {
+    console.log("clicked");
+    this.apiService.startPlayback(this.videoId).subscribe(x => this.logResponse(x));
+  }
+
+  private logResponse(response: any) {
+    console.log(response);
+  }
+
   handleResponse(response: SearchResult) {
     console.log(response);
     this.serverResponse = response.results;
+    this.videoId = response.videoId;
   }
 
 }
