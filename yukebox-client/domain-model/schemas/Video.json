@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "Video",
+  "title": "Video",
+  "type": "object",
+  "properties": {
+    "videoId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

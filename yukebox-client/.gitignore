@@ -8,6 +8,9 @@
 # dependencies
 /node_modules
 
+# generated sources
+/src/app/domain/**
+
 # IDEs and editors
 /.idea
 .project

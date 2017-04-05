@@ -29,5 +29,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Notes:
 
-npm install -g json-schema-to-typescript
-json2ts domain-model/SearchResponse.json 
+### Generate typescript classes
+node domain-model/generate-typescript-classes.json
