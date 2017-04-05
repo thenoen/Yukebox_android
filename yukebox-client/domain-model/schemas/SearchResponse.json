@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
-  "id": "searchResponse",
-  "title": "searchResponse",
+  "id": "SearchResponse",
+  "title": "SearchResponse",
   "type": "object",
   "properties": {
     "success": {
@@ -10,7 +10,7 @@
     "results": {
       "type": "array",
       "items": {
-        "$ref": "Video"
+        "$ref": "Video.json"
       }
     }
   },

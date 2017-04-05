@@ -10,7 +10,7 @@
     "results": {
       "type": "array",
       "items": {
-        "$ref": "Video"
+        "$ref": "Video.json"
       }
     }
   },
