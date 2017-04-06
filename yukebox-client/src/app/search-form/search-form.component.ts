@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
-import { SearchResult } from '../services/search-result';
+import { SearchResponse } from '../domain/SearchResponse';
+import { Video } from '../domain/Video';
 
 @Component({
   selector: 'app-search-form',
@@ -9,8 +10,8 @@ import { SearchResult } from '../services/search-result';
 })
 export class SearchFormComponent implements OnInit {
 
-  serverResponse: string
-  videoId: string;
+  serverResponse: SearchResponse;
+  videoResults: Video[];
 
   constructor(private apiService: ApiService) { }
 
@@ -27,19 +28,19 @@ export class SearchFormComponent implements OnInit {
     return false;
   }
 
-  startPlayback() {
+  startPlayback(video: Video) {
     console.log("clicked");
-    this.apiService.startPlayback(this.videoId).subscribe(x => this.logResponse(x));
+    this.apiService.startPlayback(video.videoId).subscribe(x => this.logResponse(x));
   }
 
   private logResponse(response: any) {
     console.log(response);
   }
 
-  handleResponse(response: SearchResult) {
-    console.log(response);
-    this.serverResponse = response.results;
-    this.videoId = response.videoId;
+  handleResponse(response: SearchResponse) {
+    console.log("search component response:" + response);
+    this.serverResponse = response;
+    this.videoResults = response.results;
   }
 
 }

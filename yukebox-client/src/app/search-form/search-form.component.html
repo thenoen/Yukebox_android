@@ -2,4 +2,9 @@
     <input type="text" #searchInput />
     <button (click)="sendSearchRequest(searchInput)">suche! suche!</button>
 </form>
-<span (click)="startPlayback()">{{serverResponse}}</span>
+
+<video-component 
+    *ngFor="let video of videoResults"
+    [video]="video"
+    (click)="startPlayback(video)">
+</video-component>

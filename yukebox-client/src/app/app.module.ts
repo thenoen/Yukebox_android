@@ -7,11 +7,13 @@ import { ApiService } from './services/api.service';
 
 import { AppComponent } from './app.component';
 import { SearchFormComponent } from './search-form/search-form.component';
+import { VideoResult } from './video-result/video-result.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchFormComponent
+    SearchFormComponent,
+    VideoResult
   ],
   imports: [
     BrowserModule,

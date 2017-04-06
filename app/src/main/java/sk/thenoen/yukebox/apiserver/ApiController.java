@@ -1,5 +1,7 @@
 package sk.thenoen.yukebox.apiserver;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
 
@@ -9,6 +11,8 @@ import java.util.Map;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 import sk.thenoen.yukebox.YoutubeService;
+import sk.thenoen.yukebox.domain.Result;
+import sk.thenoen.yukebox.domain.SearchResponse;
 
 public class ApiController extends RouterNanoHTTPD.GeneralHandler {
 
@@ -41,15 +45,34 @@ public class ApiController extends RouterNanoHTTPD.GeneralHandler {
 		} else {
 			text.append("<p>no params in url</p><br>");
 		}
-//		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), text.toString());
-//		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), "{some: value}");
 
 		YoutubeService youtubeService = YoutubeService.getInstance();
 		List<SearchResult> searchResults = youtubeService.search(session.getParameters().get("query").get(0));
-		SearchResultSnippet snippet = searchResults.get(0).getSnippet();
-		String videoId = searchResults.get(0).getId().getVideoId();
-		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(),
-				"{\"results\":\"" + snippet.getTitle() + "\", \"videoId\":\"" + videoId + "\"}");
+
+		String jsongResponse = writeObjectToString(searchResults);
+
+		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), jsongResponse);
+	}
+
+	private String writeObjectToString(List<SearchResult> searchResults) {
+		SearchResponse searchResponse = new SearchResponse();
+		searchResponse.setSuccess(true);
+
+		for (SearchResult searchResult : searchResults) {
+			Result result = new Result();
+			result.setVideoId(searchResult.getId().getVideoId());
+			result.setName(searchResult.getSnippet().getTitle());
+			result.setDescription(searchResult.getSnippet().getDescription());
+			searchResponse.getResults().add(result);
+		}
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			return objectMapper.writeValueAsString(searchResponse);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

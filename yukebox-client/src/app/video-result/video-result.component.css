@@ -1,0 +1,39 @@
+div {
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: normal;
+}
+
+.video-result {
+    clear:both;
+    width:100%;
+}
+
+.spacer {
+    margin: 10px;
+    overflow: hidden;
+    height:90px;
+    background-color: aliceblue;
+}
+
+.video-image {
+    float:left;
+    width:144px;
+    height:90px;
+    overflow:hidden;
+    background-color: cadetblue;
+}
+
+.video-text {
+    width:auto;
+    overflow:hidden;
+    padding:10px;
+}
+
+.video-name {
+}
+
+.video-description {
+    margin-top: 5px;
+    font-size: 12px;
+}

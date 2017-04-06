@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { SearchResult } from './search-result'
+import { SearchResponse } from '../domain/SearchResponse';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -21,7 +21,7 @@ export class ApiService {
       .catch(this.handleError);
   }
 
-  searchVideos(query: string): Observable<SearchResult> {
+  searchVideos(query: string): Observable<SearchResponse> {
 
     let params: URLSearchParams = new URLSearchParams();
     params.set('query', query);
@@ -54,7 +54,7 @@ export class ApiService {
 
   private extractSearchResults(res: Response) {
     let responseBody = res.json();
-    console.log(responseBody);
+    console.log("extracted server response: " + responseBody);
     return responseBody;
   }
 
