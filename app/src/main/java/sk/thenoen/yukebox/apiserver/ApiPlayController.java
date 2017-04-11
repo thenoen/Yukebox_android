@@ -1,13 +1,9 @@
 package sk.thenoen.yukebox.apiserver;
 
-import com.google.api.services.youtube.model.SearchResult;
-
-import java.util.List;
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
-import sk.thenoen.yukebox.YoutubeService;
 import sk.thenoen.yukebox.server.MediaPlayer;
 
 public class ApiPlayController extends RouterNanoHTTPD.GeneralHandler {

@@ -29,6 +29,7 @@ public class ApiServer extends RouterNanoHTTPD {
 		super.addMappings();
 //		this.addRoute("/api/play", ApiPlayController.class, new Object());
 		providedPriorityRoutePrioritizer.addRoute("/api/search", 11, ApiController.class);
+		providedPriorityRoutePrioritizer.addRoute("/api/thumbnail", 12, ThumbnailController.class);
 		providedPriorityRoutePrioritizer.addRoute("/.*", 12, StaticPageHandler.class, wwwDir);
 
 

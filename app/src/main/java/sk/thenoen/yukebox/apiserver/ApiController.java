@@ -14,7 +14,7 @@ import sk.thenoen.yukebox.YoutubeService;
 import sk.thenoen.yukebox.domain.Result;
 import sk.thenoen.yukebox.domain.SearchResponse;
 
-public class ApiController extends RouterNanoHTTPD.GeneralHandler {
+class ApiController extends RouterNanoHTTPD.GeneralHandler {
 
 	@Override
 	public String getMimeType() {
@@ -26,6 +26,7 @@ public class ApiController extends RouterNanoHTTPD.GeneralHandler {
 		return NanoHTTPD.Response.Status.OK;
 	}
 
+	@Override
 	public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource, Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
 		StringBuilder text = new StringBuilder("<html><body>");
 		text.append("<h1>Url: ");
@@ -50,7 +51,7 @@ public class ApiController extends RouterNanoHTTPD.GeneralHandler {
 		List<SearchResult> searchResults = youtubeService.search(session.getParameters().get("query").get(0));
 
 		String jsongResponse = writeObjectToString(searchResults);
-
+		System.out.println(Thread.currentThread().getName());
 		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), jsongResponse);
 	}
 
