@@ -60,7 +60,7 @@ public class YoutubeService {
 
 		// To increase efficiency, only retrieve the fields that the application uses.
 //		search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/*)");
-		search.setFields("items(*)");
+//		search.setFields("items(*)");
 		search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
 
 		// Call the API and print results.

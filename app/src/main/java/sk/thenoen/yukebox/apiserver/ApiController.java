@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
+import com.google.api.services.youtube.model.ThumbnailDetails;
 
 import java.util.List;
 import java.util.Map;
@@ -64,6 +65,7 @@ class ApiController extends RouterNanoHTTPD.GeneralHandler {
 			result.setVideoId(searchResult.getId().getVideoId());
 			result.setName(searchResult.getSnippet().getTitle());
 			result.setDescription(searchResult.getSnippet().getDescription());
+			result.setThumbnailUrl(getThumbnailUrlString(searchResult));
 			searchResponse.getResults().add(result);
 		}
 
@@ -74,6 +76,17 @@ class ApiController extends RouterNanoHTTPD.GeneralHandler {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	private String getThumbnailUrlString(SearchResult searchResult) {
+		ThumbnailDetails thumbnailDetails = searchResult.getSnippet().getThumbnails();
+		if (thumbnailDetails.getMedium() != null) {
+			return thumbnailDetails.getMedium().getUrl();
+		}
+		if (thumbnailDetails.getStandard() != null) {
+			return thumbnailDetails.getStandard().getUrl();
+		}
+		return thumbnailDetails.getDefault().getUrl();
 	}
 
 }

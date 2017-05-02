@@ -12,6 +12,9 @@
     },
     "description": {
       "type": "string"
+    },
+    "thumbnailUrl": {
+      "type": "string"
     }
   },
   "additionalProperties": false,
