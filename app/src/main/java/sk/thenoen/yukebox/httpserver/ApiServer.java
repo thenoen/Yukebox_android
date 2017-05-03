@@ -1,11 +1,10 @@
-package sk.thenoen.yukebox.apiserver;
+package sk.thenoen.yukebox.httpserver;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
 
 import fi.iki.elonen.router.RouterNanoHTTPD;
+import sk.thenoen.yukebox.httpserver.controller.SearchController;
+import sk.thenoen.yukebox.httpserver.controller.ThumbnailController;
 
 public class ApiServer extends RouterNanoHTTPD {
 
@@ -20,6 +19,7 @@ public class ApiServer extends RouterNanoHTTPD {
 		addMappings();
 	}
 
+	//todo: may be need if a domain name will be used instead of ip address
 	public ApiServer(String hostname, int port) {
 		super(hostname, port);
 	}
@@ -27,9 +27,9 @@ public class ApiServer extends RouterNanoHTTPD {
 	@Override
 	public void addMappings() {
 		super.addMappings();
-//		this.addRoute("/api/play", ApiPlayController.class, new Object());
-		providedPriorityRoutePrioritizer.addRoute("/api/search", 11, ApiController.class);
-		providedPriorityRoutePrioritizer.addRoute("/api/thumbnail", 12, ThumbnailController.class);
+//		this.addRoute("/api/play", MediaPlayerController.class, new Object());
+		providedPriorityRoutePrioritizer.addRoute(SearchController.ROUTE_MAPPING, SearchController.ROUTE_PRIORITY, SearchController.class);
+		providedPriorityRoutePrioritizer.addRoute(ThumbnailController.ROUTE_MAPPING, ThumbnailController.ROUTE_PRIORITY, ThumbnailController.class);
 		providedPriorityRoutePrioritizer.addRoute("/.*", 13, StaticPageHandler.class, wwwDir);
 
 
@@ -47,8 +47,7 @@ public class ApiServer extends RouterNanoHTTPD {
 //		addRoute("/stream", StreamUrl.class);
 	}
 
-	public void addMapping(String url, Class<?> handler, Object... initParameter) {
-//		this.addRoute(url, handler, initParameter);
-		providedPriorityRoutePrioritizer.addRoute(url, 9, handler, initParameter);
+	public void addMapping(String url, int priority, Class<?> handler, Object... initParameter) {
+		providedPriorityRoutePrioritizer.addRoute(url, priority, handler, initParameter);
 	}
 }

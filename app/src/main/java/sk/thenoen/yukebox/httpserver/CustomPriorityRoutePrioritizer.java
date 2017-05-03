@@ -1,4 +1,4 @@
-package sk.thenoen.yukebox.apiserver;
+package sk.thenoen.yukebox.httpserver;
 
 import java.util.Collection;
 import java.util.TreeSet;

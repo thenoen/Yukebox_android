@@ -1,4 +1,4 @@
-package sk.thenoen.yukebox.apiserver;
+package sk.thenoen.yukebox.httpserver.controller;
 
 import android.support.annotation.NonNull;
 
@@ -8,7 +8,10 @@ import java.util.Map;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 
-class ThumbnailController extends RouterNanoHTTPD.GeneralHandler {
+public class ThumbnailController extends RouterNanoHTTPD.GeneralHandler {
+
+	public static final String ROUTE_MAPPING = "/api/thumbnail";
+	public static final int ROUTE_PRIORITY = 12;
 
 	private static final Object lock = new Object();
 	private static final HashSet<String> availableThumbnails = new HashSet<>();

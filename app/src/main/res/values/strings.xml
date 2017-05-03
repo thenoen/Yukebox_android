@@ -2,6 +2,7 @@
 	<string name="app_name">Yukebox</string>
 	<string name="title_activity_logging">LoggingActivity</string>
 	<string name="title_activity_init">InitActivity</string>
+	<string name="server_initialization_status_ok">Status: OK</string>
 
 	<string name="www_dir_name">www</string>
 </resources>

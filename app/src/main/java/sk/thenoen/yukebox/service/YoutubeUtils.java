@@ -1,10 +1,8 @@
-package sk.thenoen.yukebox.server;
+package sk.thenoen.yukebox.service;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
-import sk.thenoen.yukebox.YoutubeService;
 
 public final class YoutubeUtils {
 

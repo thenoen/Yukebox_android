@@ -1,4 +1,4 @@
-package sk.thenoen.yukebox;
+package sk.thenoen.yukebox.service;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -9,11 +9,7 @@ import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
-
-import sk.thenoen.yukebox.server.YoutubeUtils;
 
 public class YoutubeService {
 
@@ -22,11 +18,17 @@ public class YoutubeService {
 	// https://developers.google.com/youtube/v3/docs/search/list#type
 	private static final String SEARCH_TYPE = "video";
 
+	private static final String APPLICATION_NAME = "youtube-cmdline-search-sample";
+
 	private static YoutubeService instance;
 
-	private YouTube youtube;
+	private final YouTube youtube;
 
 	private YoutubeService() {
+		youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
+			public void initialize(HttpRequest request) throws IOException {
+			}
+		}).setApplicationName(APPLICATION_NAME).build();
 	}
 
 	public static synchronized YoutubeService getInstance() {
@@ -37,13 +39,6 @@ public class YoutubeService {
 	}
 
 	public List<SearchResult> search(String queryTerm) {
-
-
-
-		youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
-			public void initialize(HttpRequest request) throws IOException {
-			}
-		}).setApplicationName("youtube-cmdline-search-sample").build();
 
 		// Define the API request for retrieving search results.
 		YouTube.Search.List search = null;

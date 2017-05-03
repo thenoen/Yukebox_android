@@ -1,4 +1,4 @@
-package sk.thenoen.yukebox;
+package sk.thenoen.yukebox.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import sk.thenoen.yukebox.server.LoggingActivity;
+import sk.thenoen.yukebox.R;
 
 public class InitActivity extends AppCompatActivity {
 
@@ -30,7 +30,7 @@ public class InitActivity extends AppCompatActivity {
 
 		List<String> filesToCopy = new ArrayList<>();
 
-		filesToCopy.addAll(getResourcesToCopy());
+		filesToCopy.addAll(getAssetsToCopy());
 
 		File wwwDirectory = new File(getFilesDir(), getResources().getString(R.string.www_dir_name));
 		if (!wwwDirectory.exists()) {
@@ -43,7 +43,7 @@ public class InitActivity extends AppCompatActivity {
 			copyAssetToInternalStorage(s);
 		}
 
-		Intent intent = new Intent(this, LoggingActivity.class);
+		Intent intent = new Intent(this, PlayerActivity.class);
 		startActivity(intent);
 	}
 
@@ -61,7 +61,7 @@ public class InitActivity extends AppCompatActivity {
 		}
 	}
 
-	private List<String> getResourcesToCopy() {
+	private List<String> getAssetsToCopy() {
 		List<String> filesToCopy = new ArrayList<>();
 
 		try {

@@ -3,6 +3,8 @@ package sk.thenoen.yukebox;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import sk.thenoen.yukebox.service.YoutubeService;
+
 import static org.junit.Assert.*;
 
 /**

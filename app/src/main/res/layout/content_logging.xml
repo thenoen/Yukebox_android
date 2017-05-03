@@ -11,15 +11,15 @@
 	android:paddingRight="@dimen/activity_horizontal_margin"
 	android:paddingTop="@dimen/activity_vertical_margin"
 	app:layout_behavior="@string/appbar_scrolling_view_behavior"
-	tools:context="sk.thenoen.yukebox.server.LoggingActivity"
+	tools:context="sk.thenoen.yukebox.activity.PlayerActivity"
 	tools:showIn="@layout/activity_logging"
 	android:orientation="vertical">
 
 	<EditText
-		android:id="@+id/logging_text"
+		android:id="@+id/endpoint_text"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="here will be logs"
+		android:text="server endpoint:"
 		android:textColor="#000000"
 		android:gravity="top"
 	    android:enabled="false"
@@ -31,10 +31,10 @@
 		android:layout_height="wrap_content"/>
 
 	<EditText
-		android:id="@+id/output_text"
+		android:id="@+id/status_text"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:text="here will be logs"
+		android:text="status:"
 		android:textColor="#000000"
 		android:gravity="top"
 		android:enabled="false"

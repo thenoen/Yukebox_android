@@ -1,4 +1,4 @@
-package sk.thenoen.yukebox.server;
+package sk.thenoen.yukebox.service;
 
 import com.google.android.youtube.player.YouTubePlayer;
 

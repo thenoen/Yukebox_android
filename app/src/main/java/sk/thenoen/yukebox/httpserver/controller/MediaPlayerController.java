@@ -1,12 +1,15 @@
-package sk.thenoen.yukebox.apiserver;
+package sk.thenoen.yukebox.httpserver.controller;
 
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
-import sk.thenoen.yukebox.server.MediaPlayer;
+import sk.thenoen.yukebox.service.MediaPlayer;
 
-public class ApiPlayController extends RouterNanoHTTPD.GeneralHandler {
+public class MediaPlayerController extends RouterNanoHTTPD.GeneralHandler {
+
+	public static final String ROUTE_MAPPING = "/api/play";
+	public static final int ROUTE_PRIORITY = 9;
 
 	@Override
 	public String getMimeType() {

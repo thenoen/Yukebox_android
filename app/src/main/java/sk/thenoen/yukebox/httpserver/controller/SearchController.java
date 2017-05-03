@@ -1,9 +1,8 @@
-package sk.thenoen.yukebox.apiserver;
+package sk.thenoen.yukebox.httpserver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.services.youtube.model.SearchResult;
-import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.google.api.services.youtube.model.ThumbnailDetails;
 
 import java.util.List;
@@ -11,11 +10,14 @@ import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
-import sk.thenoen.yukebox.YoutubeService;
+import sk.thenoen.yukebox.service.YoutubeService;
 import sk.thenoen.yukebox.domain.Result;
 import sk.thenoen.yukebox.domain.SearchResponse;
 
-class ApiController extends RouterNanoHTTPD.GeneralHandler {
+public class SearchController extends RouterNanoHTTPD.GeneralHandler {
+
+	public static final String ROUTE_MAPPING = "/api/search";
+	public static final int ROUTE_PRIORITY = 11;
 
 	@Override
 	public String getMimeType() {
