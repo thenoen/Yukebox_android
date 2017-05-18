@@ -1,12 +1,14 @@
 <ngb-tabset>
   <ngb-tab title="Search">
     <ng-template ngbTabContent>
-      <p>These tabs are displayed as pills...</p>
+      <div class="container">
+        <app-search-form></app-search-form>
+      </div>
     </ng-template>
   </ngb-tab>
   <ngb-tab title="Playlist">
     <ng-template ngbTabContent>
-      <p>Because default values have been customized.</p>
+      <p>Songs that are currenty queued in the playlist and a song playing at the moment + time info</p>
     </ng-template>
   </ngb-tab>
 </ngb-tabset>

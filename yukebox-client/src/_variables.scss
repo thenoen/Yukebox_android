@@ -1,1 +1,13 @@
-$brand-primary: #ff0000
+$brand-primary: #ff0000;
+$custom-gray-light: #eeeeee;
+
+//sm is ok, but other should spaced evenly
+$grid-breakpoints: (
+  xs: 0,
+  sm: 479px,
+  md: 576px,
+  lg: 992px,
+  xl: 1200px
+);
+
+$nav-tabs-active-link-hover-bg: $custom-gray-light;
