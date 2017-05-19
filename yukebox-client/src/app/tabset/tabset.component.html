@@ -1,14 +1,14 @@
-<ngb-tabset>
-  <ngb-tab title="Search">
-    <ng-template ngbTabContent>
-      <div class="container">
-        <app-search-form></app-search-form>
-      </div>
-    </ng-template>
-  </ngb-tab>
-  <ngb-tab title="Playlist">
-    <ng-template ngbTabContent>
-      <p>Songs that are currenty queued in the playlist and a song playing at the moment + time info</p>
-    </ng-template>
-  </ngb-tab>
+<ngb-tabset [destroyOnHide]=false>
+    <ngb-tab title="Search">
+        <ng-template ngbTabContent>
+            <div class="container">
+                <app-search-form></app-search-form>
+            </div>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Playlist">
+        <ng-template ngbTabContent>
+            <p>Songs that are currenty queued in the playlist and a song playing at the moment + time info</p>
+        </ng-template>
+    </ngb-tab>
 </ngb-tabset>
