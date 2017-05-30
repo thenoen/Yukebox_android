@@ -13,7 +13,7 @@ import java.util.List;
 
 public class YoutubeService {
 
-	private static final long NUMBER_OF_VIDEOS_RETURNED = 10;
+	private static final long NUMBER_OF_VIDEOS_RETURNED = 20;
 
 	// https://developers.google.com/youtube/v3/docs/search/list#type
 	private static final String SEARCH_TYPE = "video";

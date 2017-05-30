@@ -10,6 +10,9 @@ import { SearchFormComponent } from './search-form/search-form.component';
 import { NgbdTabsetConfig } from './tabset/tabset.component'
 import { VideoResult } from './video-result/video-result.component';
 
+
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +25,8 @@ import { VideoResult } from './video-result/video-result.component';
     FormsModule,
     HttpModule,
     JsonpModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    InfiniteScrollModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]

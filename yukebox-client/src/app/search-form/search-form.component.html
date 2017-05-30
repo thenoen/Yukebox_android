@@ -14,6 +14,13 @@
     </form>
 </div>
 
-<!-- replace with https://github.com/orizens/ngx-infinite-scroll-->
+<!-- https://github.com/orizens/ngx-infinite-scroll -->
+ <div class="search-results"
+         data-infinite-scroll
+         debounce
+         [infiniteScrollDistance]="scrollDistance"
+         [infiniteScrollThrottle]="throttle"
+         (scrolled)="onScrollDown()">
 <video-component *ngFor="let video of videoResults" [video]="video" (click)="startPlayback(video)">
 </video-component>
+ </div>

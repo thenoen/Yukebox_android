@@ -10,6 +10,10 @@ import { Video } from '../domain/Video';
 })
 export class SearchFormComponent implements OnInit {
 
+  sum = 100;
+  throttle = 300;
+  scrollDistance = 1;
+
   serverResponse: SearchResponse;
   videoResults: Video[];
 
@@ -41,6 +45,10 @@ export class SearchFormComponent implements OnInit {
     console.log("search component response:" + response);
     this.serverResponse = response;
     this.videoResults = response.results;
+  }
+
+  onScrollDown() {
+    console.log("scrolled down, todo: implement loading of next videos");
   }
 
 }
