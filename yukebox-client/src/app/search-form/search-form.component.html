@@ -1,26 +1,17 @@
-<!--<form class="form-inline justify-content-center mt-2">
-    <input type="text" class="form-control mx-2 mb-2" placeholder="Video title..." #searchInput />
-    <button (click)="sendSearchRequest(searchInput)" class="btn btn-primary mx-2 mb-2">Search</button>
-</form>-->
-
 <div class="container">
     <form class="pt-2">
-        <div class="form-group row">
-            <div class="col-sm-10 mb-2">
-                <input type="text" class="form-control" placeholder="Video title" #searchInput />
-            </div>
-            <button (click)="sendSearchRequest(searchInput)" class="btn btn-primary col-sm-2 px-2 mb-2">Search</button>
+
+        <div class="d-flex">
+            <input type="text" class="form-control mb-2" placeholder="Video title" #searchInput />
+
+            <button (click)="sendSearchRequest(searchInput)" class="btn btn-primary col-sm-2 px-2 mb-2 ml-2">Search</button>
         </div>
     </form>
 </div>
 
 <!-- https://github.com/orizens/ngx-infinite-scroll -->
- <div class="search-results"
-         data-infinite-scroll
-         debounce
-         [infiniteScrollDistance]="scrollDistance"
-         [infiniteScrollThrottle]="throttle"
-         (scrolled)="onScrollDown()">
-<video-component *ngFor="let video of videoResults" [video]="video" (click)="startPlayback(video)">
-</video-component>
- </div>
+<div class="search-results" data-infinite-scroll debounce [infiniteScrollDistance]="scrollDistance" [infiniteScrollThrottle]="throttle"
+    (scrolled)="onScrollDown()">
+    <video-component *ngFor="let video of videoResults" [video]="video" (click)="startPlayback(video)">
+    </video-component>
+</div>
