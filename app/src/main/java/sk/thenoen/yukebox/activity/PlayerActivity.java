@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.Locale;
 
 import sk.thenoen.yukebox.R;
-import sk.thenoen.yukebox.httpserver.controller.MediaPlayerController;
 import sk.thenoen.yukebox.httpserver.ApiHttpServer;
+import sk.thenoen.yukebox.httpserver.controller.MediaPlayerController;
 import sk.thenoen.yukebox.service.MediaPlayer;
 import sk.thenoen.yukebox.service.YoutubeUtils;
 
@@ -78,13 +78,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean b) {
 		MediaPlayer mediaPlayer = new MediaPlayer(youTubePlayer);
 		apiHttpServer.addMapping(MediaPlayerController.ROUTE_MAPPING, MediaPlayerController.ROUTE_PRIORITY, MediaPlayerController.class, mediaPlayer);
-		guiUpdateHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				updateStatusText(getResources().getString(R.string.server_initialization_status_ok));
-			}
-		});
-
+		guiUpdateHandler.post(() -> updateStatusText(getResources().getString(R.string.server_initialization_status_ok)));
 	}
 
 	@Override
@@ -94,6 +88,11 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	}
 
 	private void updateStatusText(String text) {
-		statusText.setText(text);
+		statusText.append(text + "\n");
+	}
+
+	@Override
+	public void onBackPressed () {
+		moveTaskToBack (true);
 	}
 }
