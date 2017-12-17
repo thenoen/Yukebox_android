@@ -21,3 +21,18 @@ allprojects {
 task clean(type: Delete) {
 	delete rootProject.buildDir
 }
+
+task buildClient(type: Exec, description: 'My Build num exe') {
+
+}
+
+task copyClient(type: Exec) {
+	commandLine "npm"
+	File wwwRootDir = new File("assets/www")
+	println wwwRootDir.getAbsolutePath()
+}
+
+
+tasks.withType(JavaCompile) {
+	compileTask -> compileTask.dependsOn buildNum
+}

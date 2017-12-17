@@ -65,6 +65,7 @@ dependencies {
 
 }
 
+// this is configuration for generating of POJO classes from json-schema
 // Each configuration is set to the default value
 jsonSchema2Pojo {
 	// Whether to generate builder-style methods of the form withXxx(value) (that return this),

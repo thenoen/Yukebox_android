@@ -6,12 +6,12 @@ import fi.iki.elonen.router.RouterNanoHTTPD;
 import sk.thenoen.yukebox.httpserver.controller.SearchController;
 import sk.thenoen.yukebox.httpserver.controller.ThumbnailController;
 
-public class ApiServer extends RouterNanoHTTPD {
+public class ApiHttpServer extends RouterNanoHTTPD {
 
 	private File wwwDir;
 	private ProvidedPriorityRoutePrioritizer providedPriorityRoutePrioritizer;
 
-	public ApiServer(int port, File wwwDir) {
+	public ApiHttpServer(int port, File wwwDir) {
 		super(port);
 		this.wwwDir = wwwDir;
 		providedPriorityRoutePrioritizer = new CustomPriorityRoutePrioritizer();
@@ -19,8 +19,8 @@ public class ApiServer extends RouterNanoHTTPD {
 		addMappings();
 	}
 
-	//todo: may be need if a domain name will be used instead of ip address
-	public ApiServer(String hostname, int port) {
+	//may be needed if a domain name will be used instead of ip address
+	public ApiHttpServer(String hostname, int port) {
 		super(hostname, port);
 	}
 
