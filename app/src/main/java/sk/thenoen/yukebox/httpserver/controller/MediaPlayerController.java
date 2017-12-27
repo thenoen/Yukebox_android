@@ -46,7 +46,7 @@ public class MediaPlayerController extends RouterNanoHTTPD.GeneralHandler {
 		MediaPlayer mediaPlayer = uriResource.initParameter(0, MediaPlayer.class);
 		String videoId = session.getParameters().get("videoId").get(0);
 		mediaPlayer.playVideo(videoId);
-		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), "{\"result\":\"plaing video" + videoId + "\"}");
+		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), "{\"result\":\"playing video" + videoId + "\"}");
 	}
 
 }

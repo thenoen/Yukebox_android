@@ -14,7 +14,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import sk.thenoen.yukebox.R;
+import sk.thenoen.yukebox.database.dao.VideoDao;
 import sk.thenoen.yukebox.httpserver.ApiHttpServer;
 import sk.thenoen.yukebox.httpserver.controller.MediaPlayerController;
 import sk.thenoen.yukebox.service.MediaPlayer;
@@ -28,8 +32,12 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	private Handler guiUpdateHandler = new Handler();
 	private EditText statusText;
 
+	@Inject
+	VideoDao videoDao;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_logging);
 		statusText = (EditText) findViewById(R.id.status_text);
@@ -43,8 +51,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	private void displayServerEndpoint() {
 		WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 		int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
-		final String formatedIpAddress = String.format(Locale.getDefault(),
-				"%d.%d.%d.%d",
+		final String formatedIpAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
 				(ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
 
 		EditText editText = (EditText) findViewById(R.id.endpoint_text);

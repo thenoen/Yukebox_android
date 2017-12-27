@@ -73,6 +73,13 @@ dependencies {
 	implementation "android.arch.lifecycle:extensions:1.0.0"
 	implementation "android.arch.lifecycle:reactivestreams:1.0.0"
 	testImplementation "android.arch.core:core-testing:1.0.0"
+
+	// Dagger2
+	compile 'com.google.dagger:dagger:2.14.1'
+	annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+	compile 'com.google.dagger:dagger-android:2.14.1'
+	compile 'com.google.dagger:dagger-android-support:2.14.1' // if you use the support libraries
+	annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
 }
 
 // this is configuration for generating of POJO classes from json-schema

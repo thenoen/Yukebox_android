@@ -10,7 +10,7 @@ public class MediaPlayer {
 		this.youTubePlayer = youTubePlayer;
 	}
 
-	public void playVideo(String vidoId) {
+	public void playVideo(String videoId) {
 		youTubePlayer.setPlayerStateChangeListener(
 				new YouTubePlayer.PlayerStateChangeListener() {
 					@Override
@@ -44,6 +44,6 @@ public class MediaPlayer {
 					}
 				}
 		);
-		youTubePlayer.cueVideo(vidoId);
+		youTubePlayer.cueVideo(videoId);
 	}
 }
