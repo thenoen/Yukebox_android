@@ -3,6 +3,8 @@ package sk.thenoen.yukebox.injection.modules;
 
 import android.app.Activity;
 
+import javax.inject.Singleton;
+
 import dagger.Binds;
 import dagger.Module;
 import dagger.Subcomponent;
@@ -21,11 +23,12 @@ public abstract class PlayerActivityModule {
     abstract AndroidInjector.Factory<? extends Activity> bindPlayerActivityInjectorFactory(PlayerActivitySubcomponent.Builder builder);
 
     @Subcomponent(modules = {DatabaseModule.class})
+    @Singleton
     public interface PlayerActivitySubcomponent extends AndroidInjector<PlayerActivity> {
         @Subcomponent.Builder
         public abstract class Builder extends AndroidInjector.Builder<PlayerActivity> {
 
-            // this method has to be public
+            // this method has to be public, it is required by Dagger2 code generation
             public abstract Builder databaseModule(DatabaseModule module);
 
             @Override

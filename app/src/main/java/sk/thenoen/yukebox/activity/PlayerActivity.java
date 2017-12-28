@@ -1,9 +1,14 @@
 package sk.thenoen.yukebox.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -16,6 +21,9 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 import sk.thenoen.yukebox.R;
 import sk.thenoen.yukebox.database.dao.VideoDao;
@@ -30,7 +38,15 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	private ApiHttpServer apiHttpServer;
 
 	private Handler guiUpdateHandler = new Handler();
-	private EditText statusText;
+
+	@BindView(R.id.log_text)
+	TextView statusText;
+
+	@BindView(R.id.url_text)
+	TextView urlText;
+
+	@BindView(R.id.copy_url_button)
+	ImageButton copyUrlButton;
 
 	@Inject
 	VideoDao videoDao;
@@ -39,8 +55,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	protected void onCreate(Bundle savedInstanceState) {
 		AndroidInjection.inject(this);
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_logging);
-		statusText = (EditText) findViewById(R.id.status_text);
+		setContentView(R.layout.player_activity_layout);
+		ButterKnife.bind(this);
 
 		File wwwDirectory = new File(getFilesDir(), getResources().getString(R.string.www_dir_name));
 		startHttpServer(wwwDirectory);
@@ -54,8 +70,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		final String formatedIpAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
 				(ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
 
-		EditText editText = (EditText) findViewById(R.id.endpoint_text);
-		editText.setText(getString(R.string.server_endpoint, formatedIpAddress, SERVER_PORT));
+		urlText.setText(getString(R.string.server_endpoint, formatedIpAddress, SERVER_PORT));
 	}
 
 	private void startHttpServer(File wwwDirectory) {
@@ -90,8 +105,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
 	@Override
 	public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-		EditText editText = (EditText) findViewById(R.id.status_text);
-		editText.append(youTubeInitializationResult.toString());
+		statusText.append(youTubeInitializationResult.toString());
 	}
 
 	private void updateStatusText(String text) {
@@ -101,5 +115,15 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@Override
 	public void onBackPressed () {
 		moveTaskToBack (true);
+	}
+
+	@OnClick(R.id.copy_url_button)
+	public void copyTextToClipboard() {
+		ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+		ClipData clip = ClipData.newPlainText(getText(R.string.url_copy_label), urlText.getText());
+		clipboard.setPrimaryClip(clip);
+
+		Toast toast = Toast.makeText(this, getText(R.string.url_copied_toast), Toast.LENGTH_LONG);
+		toast.show();
 	}
 }

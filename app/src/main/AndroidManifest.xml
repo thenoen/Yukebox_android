@@ -11,17 +11,17 @@
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:supportsRtl="true"
-		android:theme="@style/AppTheme">
+		android:theme="@style/AppTheme.NoActionBar">
 		<activity
 			android:name=".activity.PlayerActivity"
 			android:label="@string/title_activity_logging"
-			android:theme="@style/AppTheme.NoActionBar">
+			android:theme="@style/YukeboxTheme">
 		</activity>
 		<activity
 			android:name=".activity.InitActivity"
 			android:noHistory="true"
 			android:label="@string/app_name"
-			android:theme="@style/AppTheme.NoActionBar">
+			android:theme="@style/YukeboxTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>

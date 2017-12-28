@@ -5,5 +5,10 @@
 	<string name="server_initialization_status_ok">Status: OK</string>
 
 	<string name="www_dir_name">www</string>
-	<string name="server.endpoint">server endpoint: http://%1$s:%2$s</string>
+	<string name="server.endpoint">http://%1$s:%2$s</string>
+
+	<string name="url_title">URL:</string>
+	<string name="url_copy_label">Yukebox URL</string>
+	<string name="url_copied_toast">URL copied to clipboard with success</string>
+
 </resources>
