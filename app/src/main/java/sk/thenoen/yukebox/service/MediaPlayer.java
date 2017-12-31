@@ -46,4 +46,8 @@ public class MediaPlayer {
 		);
 		youTubePlayer.cueVideo(videoId);
 	}
+
+	public int getCurrentTimeMillis() {
+		return youTubePlayer.getCurrentTimeMillis();
+	}
 }
