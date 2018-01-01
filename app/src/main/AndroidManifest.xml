@@ -15,7 +15,8 @@
 		<activity
 			android:name=".activity.PlayerActivity"
 			android:label="@string/title_activity_logging"
-			android:theme="@style/YukeboxTheme">
+			android:theme="@style/YukeboxTheme"
+			android:configChanges="keyboardHidden|orientation|screenSize">
 		</activity>
 		<activity
 			android:name=".activity.InitActivity"

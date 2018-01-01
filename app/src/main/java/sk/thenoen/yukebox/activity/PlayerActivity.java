@@ -9,10 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
-import android.transition.TransitionManager;
-import android.util.Log;
-import android.view.View;
-import android.widget.FrameLayout;
+import android.support.constraint.solver.widgets.ConstraintWidget;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,8 +43,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
 	private Handler guiUpdateHandler = new Handler();
 
-	@BindView(android.R.id.content)
-	View rootActivityView;
+	@BindView(R.id.player_activity_content_root)
+	ConstraintLayout contentViewConstraintLayout;
 
 	@BindView(R.id.log_text)
 	TextView statusText;
@@ -58,11 +55,15 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@BindView(R.id.copy_url_button)
 	ImageButton copyUrlButton;
 
+	@BindView(R.id.youtube_view)
+	YouTubePlayerView youTubePlayerView;
+
 	@Inject
 	VideoDao videoDao;
 
-	private MediaPlayer mediaPlayer;
-	private int time = -1;
+	//	private MediaPlayer mediaPlayer;
+	private ConstraintSet landscapeConstraintSet;
+	private ConstraintSet portraitConstraintSet;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,43 +77,78 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		displayServerEndpoint();
 		initYoutubePlayer();
 
-		if (savedInstanceState != null) {
-			time = savedInstanceState.getInt("time", -1);
-		}
-	}
+		portraitConstraintSet = createPortraitConstraintSet();
+		landscapeConstraintSet = createLandscapeConstraintSet();
 
-	@Override
-	protected void onSaveInstanceState(Bundle bundle) {
-		super.onSaveInstanceState(bundle);
-
-		int currentTimeMillis = mediaPlayer.getCurrentTimeMillis();
-		bundle.putInt("time", currentTimeMillis);
-
-		Log.i("my_tag", "time - activity: " + currentTimeMillis);
+		rotateView(getResources().getConfiguration().orientation);
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		rotateView();
+		rotateView(newConfig.orientation);
 	}
 
-	private void rotateView() {
-		ConstraintSet constraintSet = new ConstraintSet();
-		constraintSet.load(this, R.layout.player_activity_layout_land);
+	private void rotateView(int orientation) {
+		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+			portraitConstraintSet.applyTo(contentViewConstraintLayout);
+		} else {
+			landscapeConstraintSet.applyTo(contentViewConstraintLayout);
+		}
+	}
 
-		ConstraintLayout constraintLayout = (ConstraintLayout) ((FrameLayout) rootActivityView).getChildAt(0);
-		TransitionManager.beginDelayedTransition(constraintLayout);
-		constraintSet.applyTo(constraintLayout);
+	private ConstraintSet createPortraitConstraintSet() {
+		ConstraintSet landscapeConstraintSet = new ConstraintSet();
+		landscapeConstraintSet.clone(contentViewConstraintLayout);
+		return landscapeConstraintSet;
+	}
+
+	private ConstraintSet createLandscapeConstraintSet() {
+		ConstraintSet portraitConstraintSet = new ConstraintSet();
+		portraitConstraintSet.clone(contentViewConstraintLayout);
+		portraitConstraintSet.clone(portraitConstraintSet);
+
+		portraitConstraintSet.clear(R.id.youtube_view);
+		portraitConstraintSet.clear(R.id.log_text);
+
+		int margin = (int) getResources().getDimension(R.dimen.default_margin);
+		portraitConstraintSet.connect(R.id.youtube_view, ConstraintSet.TOP, R.id.url_title, ConstraintSet.BOTTOM, margin);
+		portraitConstraintSet.connect(R.id.log_text, ConstraintSet.TOP, R.id.url_title, ConstraintSet.BOTTOM, margin);
+
+		portraitConstraintSet.connect(R.id.youtube_view, ConstraintSet.START, R.id.player_activity_content_root, ConstraintSet.START, 0);
+		portraitConstraintSet.connect(R.id.log_text, ConstraintSet.END, R.id.player_activity_content_root, ConstraintSet.END, 0);
+
+		portraitConstraintSet.connect(R.id.log_text, ConstraintSet.LEFT, R.id.youtube_view, ConstraintSet.RIGHT, 0);
+		portraitConstraintSet.connect(R.id.youtube_view, ConstraintSet.RIGHT, R.id.log_text, ConstraintSet.LEFT, 0);
+
+		portraitConstraintSet.createHorizontalChain(R.id.youtube_view, ConstraintSet.RIGHT, R.id.log_text, ConstraintSet.LEFT,
+				new int[]{R.id.youtube_view, R.id.log_text}, null, ConstraintWidget.CHAIN_SPREAD);
+
+		//todo weights should be defined in createHorizontalChain() but there is a bug in version 1.0.2 of ConstraintLayout
+		//todo these weights can cause problems on devices with small resolution - there limit for minimal dimensions of youtube view (px)
+		portraitConstraintSet.setHorizontalWeight(R.id.youtube_view, 1f);
+		portraitConstraintSet.setHorizontalWeight(R.id.log_text, 2f);
+
+		portraitConstraintSet.constrainWidth(R.id.youtube_view, ConstraintSet.MATCH_CONSTRAINT);
+		portraitConstraintSet.constrainWidth(R.id.log_text, ConstraintSet.MATCH_CONSTRAINT);
+
+		portraitConstraintSet.constrainHeight(R.id.youtube_view, ConstraintSet.WRAP_CONTENT);
+		portraitConstraintSet.constrainHeight(R.id.log_text, ConstraintSet.WRAP_CONTENT);
+
+		return portraitConstraintSet;
 	}
 
 	private void displayServerEndpoint() {
 		WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+		if (wifiManager == null) {
+			urlText.setText(getString(R.string.server_endpoint_cannot_be_obtained));
+			return;
+		}
 		int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
-		final String formatedIpAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
+		final String formattedIpAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
 				(ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
 
-		urlText.setText(getString(R.string.server_endpoint, formatedIpAddress, SERVER_PORT));
+		urlText.setText(getString(R.string.server_endpoint, formattedIpAddress, SERVER_PORT));
 	}
 
 	private void startHttpServer(File wwwDirectory) {
@@ -134,13 +170,12 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	}
 
 	private void initYoutubePlayer() {
-		YouTubePlayerView youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
-		youTubeView.initialize(YoutubeUtils.getYoutubeApiKey(), this);
+		youTubePlayerView.initialize(YoutubeUtils.getYoutubeApiKey(), this);
 	}
 
 	@Override
 	public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean b) {
-		mediaPlayer = new MediaPlayer(youTubePlayer);
+		MediaPlayer mediaPlayer = new MediaPlayer(youTubePlayer);
 		youTubePlayer.setPlaybackEventListener(new YouTubePlayer.PlaybackEventListener() {
 
 			@Override
@@ -150,12 +185,12 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
 			@Override
 			public void onPaused() {
-				Log.i("my_tag", "time - handler pause: " + youTubePlayer.getCurrentTimeMillis());
+
 			}
 
 			@Override
 			public void onStopped() {
-				Log.i("my_tag", "time - handler stop: " + youTubePlayer.getCurrentTimeMillis());
+
 			}
 
 			@Override
@@ -170,11 +205,6 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		});
 		apiHttpServer.addMapping(MediaPlayerController.ROUTE_MAPPING, MediaPlayerController.ROUTE_PRIORITY, MediaPlayerController.class, mediaPlayer);
 		guiUpdateHandler.post(() -> updateStatusText(getResources().getString(R.string.server_initialization_status_ok)));
-		if (time != -1) {
-			Log.i("my_tag", "play time: " + youTubePlayer.getCurrentTimeMillis());
-			youTubePlayer.play();
-			Log.i("my_tag", "play time2: " + youTubePlayer.getCurrentTimeMillis());
-		}
 	}
 
 	@Override
@@ -187,19 +217,22 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	}
 
 	@Override
-	public void onBackPressed () {
-		moveTaskToBack (true);
+	public void onBackPressed() {
+		moveTaskToBack(true);
 	}
 
 	@OnClick(R.id.copy_url_button)
 	public void copyTextToClipboard() {
 		ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+		if (clipboard == null) {
+			Toast.makeText(this, getText(R.string.url_cannot_be_copied_toast), Toast.LENGTH_LONG)
+					.show();
+			return;
+		}
 		ClipData clip = ClipData.newPlainText(getText(R.string.url_copy_label), urlText.getText());
 		clipboard.setPrimaryClip(clip);
 
-		Toast toast = Toast.makeText(this, getText(R.string.url_copied_toast), Toast.LENGTH_LONG);
-		toast.show();
-
-		rotateView();
+		Toast.makeText(this, getText(R.string.url_copied_toast), Toast.LENGTH_LONG)
+				.show();
 	}
 }
