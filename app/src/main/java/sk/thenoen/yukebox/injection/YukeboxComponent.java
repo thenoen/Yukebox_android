@@ -8,6 +8,5 @@ import sk.thenoen.yukebox.injection.modules.PlayerActivityModule;
 @Component(modules = {AndroidInjectionModule.class, PlayerActivityModule.class})
 public interface YukeboxComponent {
 
-
-    void inject(YukeboxApplication yukeboxApplication);
+	void inject(YukeboxApplication yukeboxApplication);
 }

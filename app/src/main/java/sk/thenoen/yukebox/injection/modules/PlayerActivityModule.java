@@ -22,7 +22,7 @@ public abstract class PlayerActivityModule {
     @ActivityKey(PlayerActivity.class)
     abstract AndroidInjector.Factory<? extends Activity> bindPlayerActivityInjectorFactory(PlayerActivitySubcomponent.Builder builder);
 
-    @Subcomponent(modules = {DatabaseModule.class})
+    @Subcomponent(modules = {DatabaseModule.class, ServiceModule.class})
     @Singleton
     public interface PlayerActivitySubcomponent extends AndroidInjector<PlayerActivity> {
         @Subcomponent.Builder
@@ -30,10 +30,12 @@ public abstract class PlayerActivityModule {
 
             // this method has to be public, it is required by Dagger2 code generation
             public abstract Builder databaseModule(DatabaseModule module);
+            public abstract Builder serviceModule(ServiceModule module);
 
             @Override
             public void seedInstance(PlayerActivity activity) {
                 databaseModule(new DatabaseModule((YukeboxApplication)activity.getApplicationContext()));
+                serviceModule(new ServiceModule((YukeboxApplication)activity.getApplicationContext()));
             }
         }
     }

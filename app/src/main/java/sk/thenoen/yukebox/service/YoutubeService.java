@@ -18,22 +18,27 @@ public class YoutubeService {
 	// https://developers.google.com/youtube/v3/docs/search/list#type
 	private static final String SEARCH_TYPE = "video";
 
-	private static final String APPLICATION_NAME = "youtube-cmdline-search-sample";
+	private static final String APPLICATION_NAME = "Yukebox";
 
 	private static YoutubeService instance;
 
 	private final YouTube youtube;
 
-	private YoutubeService() {
+	private YoutubeService(String packageName, String sha1) {
 		youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
 			public void initialize(HttpRequest request) throws IOException {
+//				String packageName = context.getPackageName();
+//				String SHA1 = getSHA1(packageName);
+
+				request.getHeaders().set("X-Android-Package", packageName);
+				request.getHeaders().set("X-Android-Cert", sha1);
 			}
 		}).setApplicationName(APPLICATION_NAME).build();
 	}
 
-	public static synchronized YoutubeService getInstance() {
-		if(instance == null) {
-			instance = new YoutubeService();
+	public static synchronized YoutubeService getInstance(String packageName, String sha1) {
+		if (instance == null) {
+			instance = new YoutubeService(packageName, sha1);
 		}
 		return instance;
 	}

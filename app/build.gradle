@@ -12,6 +12,14 @@ buildscript {
 }
 
 android {
+	signingConfigs {
+		yukebox_config {
+			keyAlias YUKEBOX_SIGNING_KEY_ALIAS
+			keyPassword YUKEBOX_SIGNING_KEY_PASSWORD
+			storeFile file(System.getProperty("user.home") + File.separator + YUKEBOX_SIGNING_KEYSTORE_FILE)
+			storePassword YUKEBOX_SIGNING_KEYSTORE_PASSWORD
+		}
+	}
 	compileSdkVersion 25
 	buildToolsVersion '26.0.2'
 	defaultConfig {
@@ -23,10 +31,19 @@ android {
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 		multiDexEnabled true
 	}
+	lintOptions {
+		// this is needed because of transitive dependencies of 'nanohttpd'
+		abortOnError false
+	}
 	buildTypes {
 		release {
-			minifyEnabled false
+			minifyEnabled true
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+			signingConfig signingConfigs.yukebox_config
+		}
+		debug {
+			minifyEnabled false
+			signingConfig signingConfigs.yukebox_config
 		}
 	}
 	compileOptions {
@@ -62,26 +79,22 @@ dependencies {
 	implementation 'javax.validation:validation-api:1.1.0.CR2'
 	// Required if generating Jackson 2 annotations
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.1'
-
-
 	// Room persistence
-	implementation "android.arch.persistence.room:runtime:1.0.0"
+	implementation 'android.arch.persistence.room:runtime:1.0.0'
 	annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
-	testImplementation "android.arch.persistence.room:testing:1.0.0"
-	implementation "android.arch.persistence.room:rxjava2:1.0.0"
-
+	testImplementation 'android.arch.persistence.room:testing:1.0.0'
+	implementation 'android.arch.persistence.room:rxjava2:1.0.0'
 	// LiveData and ViewModel
-	implementation "android.arch.lifecycle:extensions:1.0.0"
-	implementation "android.arch.lifecycle:reactivestreams:1.0.0"
-	testImplementation "android.arch.core:core-testing:1.0.0"
-
+	implementation 'android.arch.lifecycle:extensions:1.0.0'
+	implementation 'android.arch.lifecycle:reactivestreams:1.0.0'
+	testImplementation 'android.arch.core:core-testing:1.0.0'
 	// Dagger2
 	compile 'com.google.dagger:dagger:2.14.1'
 	annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
 	compile 'com.google.dagger:dagger-android:2.14.1'
-	compile 'com.google.dagger:dagger-android-support:2.14.1' // if you use the support libraries
+	compile 'com.google.dagger:dagger-android-support:2.14.1'
+	// if you use the support libraries
 	annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
-
 	// ButterKnife
 	compile 'com.jakewharton:butterknife:8.8.1'
 	annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'

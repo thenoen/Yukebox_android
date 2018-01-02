@@ -13,18 +13,27 @@ import sk.thenoen.yukebox.injection.DaggerYukeboxComponent;
 
 public class YukeboxApplication extends Application implements HasActivityInjector {
 
+    private static YukeboxApplication yukeboxApplication;
+
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerYukeboxComponent.create().inject(this); // this works
-//        DaggerYukeboxComponent.builder().xdatabaseModule(new DatabaseModule(this)).build().inject(this);
+        DaggerYukeboxComponent.create().inject(this);
+        yukeboxApplication = this;
     }
 
     @Override
     public AndroidInjector<Activity> activityInjector() {
         return dispatchingAndroidInjector;
+    }
+
+    public static YukeboxApplication getInstance() {
+        if (yukeboxApplication == null) {
+            throw new RuntimeException("Application was not initialized");
+        }
+        return yukeboxApplication;
     }
 }

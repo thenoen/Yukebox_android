@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import sk.thenoen.yukebox.service.YoutubeService;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -21,7 +21,7 @@ public class ExampleUnitTest {
 	@Ignore("it is using real youtube api")
 	@Test
 	public void verifyYoutubeService() throws Exception {
-		YoutubeService youtubeService = YoutubeService.getInstance();
+		YoutubeService youtubeService = YoutubeService.getInstance("package.name", "sha1");
 		youtubeService.search("song of silence");
 	}
 }

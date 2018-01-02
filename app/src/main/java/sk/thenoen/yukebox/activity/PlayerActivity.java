@@ -34,6 +34,7 @@ import sk.thenoen.yukebox.database.dao.VideoDao;
 import sk.thenoen.yukebox.httpserver.ApiHttpServer;
 import sk.thenoen.yukebox.httpserver.controller.MediaPlayerController;
 import sk.thenoen.yukebox.service.MediaPlayer;
+import sk.thenoen.yukebox.service.YoutubeService;
 import sk.thenoen.yukebox.service.YoutubeUtils;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
@@ -61,7 +62,9 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@Inject
 	VideoDao videoDao;
 
-	//	private MediaPlayer mediaPlayer;
+	@Inject
+	YoutubeService youtubeService;
+
 	private ConstraintSet landscapeConstraintSet;
 	private ConstraintSet portraitConstraintSet;
 
@@ -176,34 +179,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@Override
 	public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean b) {
 		MediaPlayer mediaPlayer = new MediaPlayer(youTubePlayer);
-		youTubePlayer.setPlaybackEventListener(new YouTubePlayer.PlaybackEventListener() {
-
-			@Override
-			public void onPlaying() {
-
-			}
-
-			@Override
-			public void onPaused() {
-
-			}
-
-			@Override
-			public void onStopped() {
-
-			}
-
-			@Override
-			public void onBuffering(boolean b) {
-
-			}
-
-			@Override
-			public void onSeekTo(int i) {
-
-			}
-		});
-		apiHttpServer.addMapping(MediaPlayerController.ROUTE_MAPPING, MediaPlayerController.ROUTE_PRIORITY, MediaPlayerController.class, mediaPlayer);
+		Object[] parameters = {mediaPlayer};
+		apiHttpServer.addMapping(MediaPlayerController.ROUTE_MAPPING, MediaPlayerController.ROUTE_PRIORITY, MediaPlayerController.class, parameters);
 		guiUpdateHandler.post(() -> updateStatusText(getResources().getString(R.string.server_initialization_status_ok)));
 	}
 
