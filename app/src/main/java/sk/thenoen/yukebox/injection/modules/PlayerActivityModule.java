@@ -17,26 +17,30 @@ import sk.thenoen.yukebox.application.YukeboxApplication;
 @Module(subcomponents = PlayerActivityModule.PlayerActivitySubcomponent.class)
 public abstract class PlayerActivityModule {
 
-    @Binds
-    @IntoMap
-    @ActivityKey(PlayerActivity.class)
-    abstract AndroidInjector.Factory<? extends Activity> bindPlayerActivityInjectorFactory(PlayerActivitySubcomponent.Builder builder);
+	@Binds
+	@IntoMap
+	@ActivityKey(PlayerActivity.class)
+	abstract AndroidInjector.Factory<? extends Activity> bindPlayerActivityInjectorFactory(PlayerActivitySubcomponent.Builder builder);
 
-    @Subcomponent(modules = {DatabaseModule.class, ServiceModule.class})
-    @Singleton
-    public interface PlayerActivitySubcomponent extends AndroidInjector<PlayerActivity> {
-        @Subcomponent.Builder
-        public abstract class Builder extends AndroidInjector.Builder<PlayerActivity> {
+	@Subcomponent(modules = {DatabaseModule.class, ServiceModule.class, HttpServerModule.class})
+	@Singleton
+	public interface PlayerActivitySubcomponent extends AndroidInjector<PlayerActivity> {
+		@Subcomponent.Builder
+		public abstract class Builder extends AndroidInjector.Builder<PlayerActivity> {
 
-            // this method has to be public, it is required by Dagger2 code generation
-            public abstract Builder databaseModule(DatabaseModule module);
-            public abstract Builder serviceModule(ServiceModule module);
+			// these method have to be public, it is required by Dagger2 code generation
+			public abstract Builder databaseModule(DatabaseModule module);
 
-            @Override
-            public void seedInstance(PlayerActivity activity) {
-                databaseModule(new DatabaseModule((YukeboxApplication)activity.getApplicationContext()));
-                serviceModule(new ServiceModule((YukeboxApplication)activity.getApplicationContext()));
-            }
-        }
-    }
+			public abstract Builder serviceModule(ServiceModule module);
+
+			public abstract Builder httpServerModule(HttpServerModule module);
+
+			@Override
+			public void seedInstance(PlayerActivity activity) {
+				databaseModule(new DatabaseModule((YukeboxApplication) activity.getApplicationContext()));
+				serviceModule(new ServiceModule((YukeboxApplication) activity.getApplicationContext()));
+				httpServerModule(new HttpServerModule((YukeboxApplication) activity.getApplicationContext()));
+			}
+		}
+	}
 }

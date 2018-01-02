@@ -15,24 +15,24 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import sk.thenoen.yukebox.application.YukeboxApplication;
-import sk.thenoen.yukebox.service.YoutubeService;
+import sk.thenoen.yukebox.service.YoutubeApiService;
 
 @Module
 public class ServiceModule {
 
-	private YoutubeService youtubeService;
+	private YoutubeApiService youtubeApiService;
 
 	@Inject
-	public ServiceModule(YukeboxApplication yukeboxApplication) {
+	ServiceModule(YukeboxApplication yukeboxApplication) {
 		String packageName = yukeboxApplication.getPackageName();
 		String sha1 = getSHA1(packageName, yukeboxApplication);
-		youtubeService = YoutubeService.getInstance(packageName, sha1);
+		youtubeApiService = YoutubeApiService.getInstance(packageName, sha1);
 	}
 
 	@Provides
 	@Singleton
-	public YoutubeService providesYoutubeService() {
-		return youtubeService;
+	YoutubeApiService providesYoutubeService() {
+		return youtubeApiService;
 	}
 
 	private String getSHA1(String packageName, Application application){

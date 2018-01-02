@@ -2,17 +2,24 @@ package sk.thenoen.yukebox.httpserver;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import fi.iki.elonen.router.RouterNanoHTTPD;
 import sk.thenoen.yukebox.httpserver.controller.SearchController;
 import sk.thenoen.yukebox.httpserver.controller.ThumbnailController;
+import sk.thenoen.yukebox.service.YoutubeApiService;
 
 public class ApiHttpServer extends RouterNanoHTTPD {
+
+	private YoutubeApiService youtubeApiService;
 
 	private File wwwDir;
 	private ProvidedPriorityRoutePrioritizer providedPriorityRoutePrioritizer;
 
-	public ApiHttpServer(int port, File wwwDir) {
+	@Inject
+	public ApiHttpServer(YoutubeApiService youtubeApiService, int port, File wwwDir) {
 		super(port);
+		this.youtubeApiService = youtubeApiService;
 		this.wwwDir = wwwDir;
 		providedPriorityRoutePrioritizer = new CustomPriorityRoutePrioritizer();
 		this.setRoutePrioritizer(providedPriorityRoutePrioritizer);
@@ -28,7 +35,7 @@ public class ApiHttpServer extends RouterNanoHTTPD {
 	public void addMappings() {
 		super.addMappings();
 //		this.addRoute("/api/play", MediaPlayerController.class, new Object());
-		providedPriorityRoutePrioritizer.addRoute(SearchController.ROUTE_MAPPING, SearchController.ROUTE_PRIORITY, SearchController.class);
+		providedPriorityRoutePrioritizer.addRoute(SearchController.ROUTE_MAPPING, SearchController.ROUTE_PRIORITY, SearchController.class, youtubeApiService);
 		providedPriorityRoutePrioritizer.addRoute(ThumbnailController.ROUTE_MAPPING, ThumbnailController.ROUTE_PRIORITY, ThumbnailController.class);
 		providedPriorityRoutePrioritizer.addRoute("/.*", 13, StaticPageHandler.class, wwwDir);
 
@@ -47,7 +54,7 @@ public class ApiHttpServer extends RouterNanoHTTPD {
 //		addRoute("/stream", StreamUrl.class);
 	}
 
-	public void addMapping(String url, int priority, Class<?> handler, Object... initParameter) {
-		providedPriorityRoutePrioritizer.addRoute(url, priority, handler, initParameter);
+	public void addMapping(String url, int priority, Class<?> handler, Object... initParameters) {
+		providedPriorityRoutePrioritizer.addRoute(url, priority, handler, initParameters);
 	}
 }

@@ -19,11 +19,11 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,15 +34,25 @@ import sk.thenoen.yukebox.database.dao.VideoDao;
 import sk.thenoen.yukebox.httpserver.ApiHttpServer;
 import sk.thenoen.yukebox.httpserver.controller.MediaPlayerController;
 import sk.thenoen.yukebox.service.MediaPlayer;
-import sk.thenoen.yukebox.service.YoutubeService;
+import sk.thenoen.yukebox.service.YoutubeApiService;
 import sk.thenoen.yukebox.service.YoutubeUtils;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
-	public static final int SERVER_PORT = 9090;
-	private ApiHttpServer apiHttpServer;
-
 	private Handler guiUpdateHandler = new Handler();
+
+	@Inject
+	ApiHttpServer apiHttpServer;
+
+	@Inject
+	@Named("serverPort")
+	int serverPort;
+
+	@Inject
+	YoutubeApiService youtubeApiService;
+
+	@Inject
+	VideoDao videoDao;
 
 	@BindView(R.id.player_activity_content_root)
 	ConstraintLayout contentViewConstraintLayout;
@@ -59,12 +69,6 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@BindView(R.id.youtube_view)
 	YouTubePlayerView youTubePlayerView;
 
-	@Inject
-	VideoDao videoDao;
-
-	@Inject
-	YoutubeService youtubeService;
-
 	private ConstraintSet landscapeConstraintSet;
 	private ConstraintSet portraitConstraintSet;
 
@@ -75,8 +79,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		setContentView(R.layout.player_activity_layout);
 		ButterKnife.bind(this);
 
-		File wwwDirectory = new File(getFilesDir(), getResources().getString(R.string.www_dir_name));
-		startHttpServer(wwwDirectory);
+		startHttpServer();
 		displayServerEndpoint();
 		initYoutubePlayer();
 
@@ -151,15 +154,14 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		final String formattedIpAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
 				(ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
 
-		urlText.setText(getString(R.string.server_endpoint, formattedIpAddress, SERVER_PORT));
+		urlText.setText(getString(R.string.server_endpoint, formattedIpAddress, serverPort));
 	}
 
-	private void startHttpServer(File wwwDirectory) {
-		apiHttpServer = new ApiHttpServer(SERVER_PORT, wwwDirectory);
+	private void startHttpServer() {
 		try {
 			apiHttpServer.start();
 		} catch (IOException e) {
-			e.printStackTrace();
+			updateStatusText("Could not start server: " + e.getMessage());
 		}
 
 	}

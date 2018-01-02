@@ -1,7 +1,5 @@
 package sk.thenoen.yukebox.service;
 
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -11,7 +9,7 @@ import com.google.api.services.youtube.model.SearchResult;
 import java.io.IOException;
 import java.util.List;
 
-public class YoutubeService {
+public class YoutubeApiService {
 
 	private static final long NUMBER_OF_VIDEOS_RETURNED = 20;
 
@@ -20,25 +18,20 @@ public class YoutubeService {
 
 	private static final String APPLICATION_NAME = "Yukebox";
 
-	private static YoutubeService instance;
+	private static YoutubeApiService instance;
 
 	private final YouTube youtube;
 
-	private YoutubeService(String packageName, String sha1) {
-		youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
-			public void initialize(HttpRequest request) throws IOException {
-//				String packageName = context.getPackageName();
-//				String SHA1 = getSHA1(packageName);
-
-				request.getHeaders().set("X-Android-Package", packageName);
-				request.getHeaders().set("X-Android-Cert", sha1);
-			}
+	private YoutubeApiService(String packageName, String sha1) {
+		youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), request -> {
+			request.getHeaders().set("X-Android-Package", packageName);
+			request.getHeaders().set("X-Android-Cert", sha1);
 		}).setApplicationName(APPLICATION_NAME).build();
 	}
 
-	public static synchronized YoutubeService getInstance(String packageName, String sha1) {
+	public static synchronized YoutubeApiService getInstance(String packageName, String sha1) {
 		if (instance == null) {
-			instance = new YoutubeService(packageName, sha1);
+			instance = new YoutubeApiService(packageName, sha1);
 		}
 		return instance;
 	}

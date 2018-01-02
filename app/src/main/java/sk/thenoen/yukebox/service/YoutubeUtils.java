@@ -25,7 +25,7 @@ public final class YoutubeUtils {
 	private static String loadYoutubeApiKey() {
 		Properties properties = new Properties();
 		try {
-			InputStream in = YoutubeService.class.getResourceAsStream(PROPERTIES_CLASSPATH);
+			InputStream in = YoutubeApiService.class.getResourceAsStream(PROPERTIES_CLASSPATH);
 			properties.load(in);
 
 		} catch (IOException e) {

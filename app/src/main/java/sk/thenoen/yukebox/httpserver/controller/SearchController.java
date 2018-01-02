@@ -8,32 +8,16 @@ import com.google.api.services.youtube.model.ThumbnailDetails;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
-import sk.thenoen.yukebox.application.YukeboxApplication;
 import sk.thenoen.yukebox.domain.Result;
 import sk.thenoen.yukebox.domain.SearchResponse;
-import sk.thenoen.yukebox.injection.DaggerYukeboxManualComponent;
-import sk.thenoen.yukebox.injection.modules.ServiceModule;
-import sk.thenoen.yukebox.service.YoutubeService;
+import sk.thenoen.yukebox.service.YoutubeApiService;
 
 public class SearchController extends RouterNanoHTTPD.GeneralHandler {
 
 	public static final String ROUTE_MAPPING = "/api/search";
 	public static final int ROUTE_PRIORITY = 11;
-
-	@Inject
-	YoutubeService youtubeService;
-
-	public SearchController() {
-		DaggerYukeboxManualComponent.builder()
-				.serviceModule(new ServiceModule(YukeboxApplication.getInstance()))
-				.build()
-				.inject(this);
-
-	}
 
 	@Override
 	public String getMimeType() {
@@ -47,11 +31,12 @@ public class SearchController extends RouterNanoHTTPD.GeneralHandler {
 
 	@Override
 	public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource, Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
-		List<SearchResult> searchResults = youtubeService.search(session.getParameters().get("query").get(0));
+		YoutubeApiService youtubeApiService = uriResource.initParameter(0, YoutubeApiService.class);
+		List<SearchResult> searchResults = youtubeApiService.search(session.getParameters().get("query").get(0));
 
-		String jsongResponse = writeObjectToString(searchResults);
+		String jsonResponse = writeObjectToString(searchResults);
 		System.out.println(Thread.currentThread().getName());
-		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), jsongResponse);
+		return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), jsonResponse);
 	}
 
 	private String writeObjectToString(List<SearchResult> searchResults) {

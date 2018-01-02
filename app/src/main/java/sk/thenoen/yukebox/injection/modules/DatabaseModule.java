@@ -17,13 +17,13 @@ public class DatabaseModule {
     private YukeboxDatabase yukeboxDatabase;
 
     @Inject
-    public DatabaseModule(YukeboxApplication yukeboxApplication) {
+    DatabaseModule(YukeboxApplication yukeboxApplication) {
         yukeboxDatabase = Room.databaseBuilder(yukeboxApplication, YukeboxDatabase.class, "YukeboxDatabase").build();
     }
 
     @Provides
     @Singleton //todo check memory issues/bugs
-    public VideoDao providesVideoDao() {
+    VideoDao providesVideoDao() {
         return yukeboxDatabase.videoDao();
     }
 }

@@ -3,7 +3,7 @@ package sk.thenoen.yukebox;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import sk.thenoen.yukebox.service.YoutubeService;
+import sk.thenoen.yukebox.service.YoutubeApiService;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,7 +21,7 @@ public class ExampleUnitTest {
 	@Ignore("it is using real youtube api")
 	@Test
 	public void verifyYoutubeService() throws Exception {
-		YoutubeService youtubeService = YoutubeService.getInstance("package.name", "sha1");
-		youtubeService.search("song of silence");
+		YoutubeApiService youtubeApiService = YoutubeApiService.getInstance("package.name", "sha1");
+		youtubeApiService.search("song of silence");
 	}
 }
