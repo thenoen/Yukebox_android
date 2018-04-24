@@ -10,8 +10,8 @@ import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
-import sk.thenoen.yukebox.domain.Result;
 import sk.thenoen.yukebox.domain.SearchResponse;
+import sk.thenoen.yukebox.domain.Video;
 import sk.thenoen.yukebox.service.YoutubeApiService;
 
 public class SearchController extends RouterNanoHTTPD.GeneralHandler {
@@ -44,7 +44,7 @@ public class SearchController extends RouterNanoHTTPD.GeneralHandler {
 		searchResponse.setSuccess(true);
 
 		for (SearchResult searchResult : searchResults) {
-			Result result = new Result();
+			Video result = new Video();
 			result.setVideoId(searchResult.getId().getVideoId());
 			result.setName(searchResult.getSnippet().getTitle());
 			result.setDescription(searchResult.getSnippet().getDescription());

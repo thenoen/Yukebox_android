@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'jsonschema2pojo'
 
 buildscript {
@@ -21,7 +22,7 @@ android {
 		}
 	}
 	compileSdkVersion 27
-	buildToolsVersion '26.0.2'
+	buildToolsVersion '27.0.3'
 	defaultConfig {
 		applicationId "sk.thenoen.yukebox"
 		minSdkVersion 22
@@ -58,7 +59,7 @@ dependencies {
 		exclude group: 'com.android.support', module: 'support-annotations'
 	})
 	implementation 'com.android.support:appcompat-v7:27.0.2'
-	implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+	implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 	implementation 'com.android.support:design:27.0.2'
 	implementation 'com.google.apis:google-api-services-youtube:v3-rev182-1.22.0'
 	testImplementation 'junit:junit:4.12'
@@ -111,6 +112,7 @@ dependencies {
 
 	// Java8 support for Lifecycles
     implementation "android.arch.lifecycle:common-java8:1.0.0"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 // this is configuration for generating of POJO classes from json-schema
@@ -245,4 +247,7 @@ jsonSchema2Pojo {
 
 	// Whether to include dynamic getters, setters, and builders or to omit these methods.
 	includeDynamicAccessors = false
+}
+repositories {
+	mavenCentral()
 }
